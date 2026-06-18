@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Entrar — Site</title>
+  <link rel="stylesheet" href="/src/assets/css/styles.css">
+</head>
+<body>
+  <main id="app">
+    <section id="tracker-tab">
+      <h2>Reconhecimento de código de rastreio</h2>
+      <form id="tracker-form">
+        <label for="trackingCode">Código de rastreio</label>
+        <input id="trackingCode" name="trackingCode" autocomplete="off" />
+        <button type="submit">Verificar</button>
+      </form>
+      <div id="tracker-result" aria-live="polite"></div>
+    </section>
+
+    <section id="login-panel" aria-hidden="true" style="display:none;">
+      <h2>Painel de Login</h2>
+      <form id="login-form">
+        <label for="user">Usuário</label>
+        <input id="user" name="user" />
+        <label for="pass">Senha</label>
+        <input id="pass" name="pass" type="password" />
+        <button type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <div id="hint" style="margin-top:1rem;color:#666;">
+      Pressione Alt + Shift + 4 para exibir o painel de login (secreto).
+    </div>
+  </main>
+
+  <script src="/src/assets/js/tracking-code.js"></script>
+  <script>
+    // keybinding para revelar painel de login: Alt + Shift + 4
+    (function(){
+      const loginPanel = document.getElementById('login-panel');
+      let revealed = false;
+      window.addEventListener('keydown', e => {
+        if (e.altKey && e.shiftKey && e.key === '4') {
+          revealed = !revealed;
+          loginPanel.style.display = revealed ? 'block' : 'none';
+          loginPanel.setAttribute('aria-hidden', revealed ? 'false' : 'true');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

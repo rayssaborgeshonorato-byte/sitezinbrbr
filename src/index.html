@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Rastreamento</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #FFFDE7 0%, #FFE082 100%);
+      min-height: 100vh;
+    }
+
+    .header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px 0;
+      border-bottom: 3px solid #FF8F00;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      color: #FF8F00;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      font-size: 40px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      border-bottom: 2px solid #eee;
+      background: white;
+      overflow-x: auto;
+    }
+
+    .tab-button {
+      padding: 16px 24px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .tab-button:hover {
+      color: #FF8F00;
+    }
+
+    .tab-button.active {
+      color: #FF8F00;
+      border-bottom-color: #FF8F00;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ==================== TAB: PESQUISA ==================== */
+    .search-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .search-title {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .search-subtitle {
+      color: #999;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 20px 16px 50px;
+      border: 2px solid #FFD600;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #FF8F00;
+      box-shadow: 0 0 0 3px rgba(255, 143, 0, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+    }
+
+    .search-result {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .search-result.active {
+      display: block;
+    }
+
+    .result-status {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .result-status.success {
+      color: green;
+      font-weight: 600;
+    }
+
+    /* ==================== TAB: LOGIN ==================== */
+    .login-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .login-title {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .login-subtitle {
+      color: #999;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #FFD600;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #FF8F00;
+      box-shadow: 0 0 0 3px rgba(255, 143, 0, 0.1);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #FF8F00;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+      background: #FFA500;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 143, 0, 0.3);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .secret-hint {
+      background: #FFFDE7;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #666;
+      margin-top: 20px;
+      border-left: 3px solid #FFD600;
+    }
+
+    /* ==================== TAB: GERADOR ==================== */
+    .generator-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .generator-title {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .generator-subtitle {
+      color: #999;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .generator-result {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+      text-align: center;
+    }
+
+    .generator-result.active {
+      display: block;
+    }
+
+    .result-code {
+      font-size: 28px;
+      font-weight: bold;
+      color: #FF8F00;
+      font-family: 'Courier New', monospace;
+      user-select: all;
+      cursor: copy;
+    }
+
+    .result-label {
+      color: #999;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    /* ==================== TAB: INFO ==================== */
+    .info-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .info-title {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .info-section {
+      margin-bottom: 30px;
+    }
+
+    .info-section-title {
+      color: #FF8F00;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-section-content {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+      background: #f9f9f9;
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 3px solid #FFD600;
+    }
+
+    .info-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .info-list li {
+      padding: 8px 0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .info-list li:before {
+      content: "→ ";
+      color: #FF8F00;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .code-block {
+      background: #333;
+      color: #0f0;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .nav-tabs {
+        flex-wrap: wrap;
+      }
+
+      .tab-button {
+        padding: 12px 16px;
+        font-size: 13px;
+      }
+
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .main-container {
+        padding: 20px 10px;
+      }
+
+      .search-card,
+      .login-card,
+      .generator-card,
+      .info-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-content">
+      <div class="logo">
+        <span class="logo-icon">📦</span>
+        <span>Rastreamento</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVEGAÇÃO DE ABAS -->
+  <div class="nav-tabs">
+    <button class="tab-button active" data-tab="pesquisa">🔍 Pesquisa</button>
+    <button class="tab-button" data-tab="login">🔐 Login</button>
+    <button class="tab-button" data-tab="gerador">✨ Gerador de Códigos</button>
+    <button class="tab-button" data-tab="info">ℹ️ Informações</button>
+  </div>
+
+  <!-- CONTEÚDO DAS ABAS -->
+  <div class="main-container">
+    <!-- TAB: PESQUISA -->
+    <div class="tab-content active" id="pesquisa-tab">
+      <div class="search-card">
+        <h2 class="search-title">Pesquisar Rastreamento</h2>
+        <p class="search-subtitle">Digite o código do seu envio</p>
+        
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            class="search-input" 
+            id="trackingSearch"
+            placeholder="Exemplo: BR-123456789"
+            autocomplete="off"
+          >
+        </div>
+
+        <div class="search-result" id="searchResult">
+          <div class="result-status" id="resultStatus"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: LOGIN -->
+    <div class="tab-content" id="login-tab">
+      <div class="login-card">
+        <h2 class="login-title">Acessar Sistema</h2>
+        <p class="login-subtitle">Entre com suas credenciais</p>
+        
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label" for="username">👤 Usuário</label>
+            <input 
+              type="text" 
+              id="username" 
+              class="form-input" 
+              placeholder="Digite seu usuário"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">🔑 Senha</label>
+            <input 
+              type="password" 
+              id="password" 
+              class="form-input" 
+              placeholder="Digite sua senha"
+              required
+            >
+          </div>
+
+          <button type="submit" class="submit-btn">Entrar</button>
+        </form>
+
+        <div class="secret-hint">
+          <strong>💡 Dica:</strong> Pressione <strong>Alt + Shift + 4</strong> após entrar para revelar recursos ocultos!
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: GERADOR -->
+    <div class="tab-content" id="gerador-tab">
+      <div class="generator-card">
+        <h2 class="generator-title">Gerar Código de Rastreio</h2>
+        <p class="generator-subtitle">Crie um novo código de rastreamento</p>
+        
+        <form id="generatorForm">
+          <div class="form-group">
+            <label class="form-label" for="prefixInput">Prefixo</label>
+            <input 
+              type="text" 
+              id="prefixInput" 
+              class="form-input" 
+              placeholder="Ex: BR"
+              value="BR"
+              maxlength="3"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="numberInput">Número</label>
+            <input 
+              type="number" 
+              id="numberInput" 
+              class="form-input" 
+              placeholder="Ex: 123456"
+              min="100000"
+              max="999999"
+            >
+          </div>
+
+          <button type="submit" class="submit-btn">Gerar Código</button>
+        </form>
+
+        <div class="generator-result" id="generatorResult">
+          <div class="result-code" id="resultCode"></div>
+          <div class="result-label">Clique para copiar</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: INFORMAÇÕES -->
+    <div class="tab-content" id="info-tab">
+      <div class="info-card">
+        <h2 class="info-title">ℹ️ Informações do Sistema</h2>
+
+        <div class="info-section">
+          <div class="info-section-title">📋 Como Funciona</div>
+          <div class="info-section-content">
+            Este é um sistema de rastreamento de envios offline. Você pode pesquisar códigos, gerar novos códigos e acessar o painel administrativo com suas credenciais.
+          </div>
+        </div>
+
+        <div class="info-section">
+          <div class="info-section-title">🎯 Funcionalidades</div>
+          <ul class="info-list">
+            <li>Pesquisar envios pelo código de rastreio</li>
+            <li>Gerar novos códigos de rastreamento</li>
+            <li>Acessar painel administrativo</li>
+            <li>Menu secreto com Alt + Shift + 4</li>
+            <li>Interface responsiva e intuitiva</li>
+          </ul>
+        </div>
+
+        <div class="info-section">
+          <div class="info-section-title">🔐 Segurança</div>
+          <div class="info-section-content">
+            <strong>Credenciais de teste:</strong><br>
+            Usuário: <code>chuva</code><br>
+            Senha: <code>0102</code><br><br>
+            <em>Nota: Para produção, utilize um backend seguro com autenticação real.</em>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <div class="info-section-title">⌨️ Atalho Secreto</div>
+          <div class="info-section-content">
+            Pressione <strong>Alt + Shift + 4</strong> na página de login para revelar recursos ocultos. Este atalho ativa mensagens de debug no console e menu especial.
+          </div>
+        </div>
+
+        <div class="info-section">
+          <div class="info-section-title">🚀 Iniciar Servidor</div>
+          <div class="code-block">
+cd /workspaces/sitezinbrbr<br>
+python3 -m http.server 8080
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sistema de Abas
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tabName = button.dataset.tab;
+        
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        button.classList.add('active');
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+      });
+    });
+
+    // PESQUISA
+    const trackingSearch = document.getElementById('trackingSearch');
+    const searchResult = document.getElementById('searchResult');
+    const resultStatus = document.getElementById('resultStatus');
+
+    trackingSearch.addEventListener('input', (e) => {
+      const code = e.target.value.trim().toUpperCase();
+      
+      if (!code) {
+        searchResult.classList.remove('active');
+        return;
+      }
+
+      const isValid = /^[A-Z0-9]{3,}-?\d{6,}$/.test(code);
+      
+      if (isValid) {
+        resultStatus.textContent = `✓ Código validado: ${code}`;
+        resultStatus.classList.add('success');
+      } else {
+        resultStatus.textContent = '✗ Formato inválido';
+        resultStatus.classList.remove('success');
+      }
+      
+      searchResult.classList.add('active');
+    });
+
+    // LOGIN
+    const loginForm = document.getElementById('loginForm');
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      
+      if (user && pass) {
+        alert(`✓ Bem-vindo, ${user}!\n\nAgora teste o atalho: Alt + Shift + 4`);
+        loginForm.reset();
+      }
+    });
+
+    // GERADOR
+    const generatorForm = document.getElementById('generatorForm');
+    const generatorResult = document.getElementById('generatorResult');
+    const resultCode = document.getElementById('resultCode');
+
+    generatorForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const prefix = document.getElementById('prefixInput').value.toUpperCase() || 'BR';
+      const number = document.getElementById('numberInput').value;
+      
+      if (number) {
+        const code = `${prefix}-${number}`;
+        resultCode.textContent = code;
+        generatorResult.classList.add('active');
+        
+        // Copiar ao clicar
+        resultCode.style.cursor = 'pointer';
+      }
+    });
+
+    resultCode.addEventListener('click', () => {
+      if (resultCode.textContent) {
+        navigator.clipboard.writeText(resultCode.textContent);
+        alert('✓ Código copiado para a área de transferência!');
+      }
+    });
+
+    console.log('%c✅ Sistema de Rastreamento Carregado', 'color: #FF8F00; font-weight: bold; font-size: 16px;');
+    console.log('%cAbas: Pesquisa, Login, Gerador, Informações', 'color: #666; font-size: 12px;');
+  </script>
+</body>
+</html>

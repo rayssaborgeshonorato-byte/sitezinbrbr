@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reconhecimento & Login - Sistema de Rastreamento</title>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+  <main id="app">
+    <!-- Aba de Reconhecimento de Código -->
+    <section id="tracker-tab">
+      <div style="text-align: center; margin-bottom: 16px;">
+        <img src="../assets/img/pngwing.com.png" alt="Logo" style="height: 56px; opacity: 0.8;">
+      </div>
+      <h2>Reconhecimento de Código de Rastreio</h2>
+      <form id="tracker-form">
+        <label for="trackingCode">Código de rastreio</label>
+        <input 
+          id="trackingCode" 
+          name="trackingCode" 
+          type="text"
+          placeholder="Ex: BR123-456789"
+          autocomplete="off" 
+        />
+        <button type="submit">Verificar Código</button>
+      </form>
+      <div id="tracker-result" aria-live="polite"></div>
+    </section>
+
+    <!-- Painel de Login (escondido) -->
+    <section id="login-panel" class="hidden" aria-hidden="true">
+      <h2>Painel de Login</h2>
+      <form id="login-form">
+        <label for="user">Usuário</label>
+        <input id="user" name="user" type="text" placeholder="Digite seu usuário" />
+        
+        <label for="pass">Senha</label>
+        <input id="pass" name="pass" type="password" placeholder="Digite sua senha" />
+        
+        <button type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <div class="hint">
+      💡 Pressione <strong>Alt + Shift + 4</strong> para revelar o painel de login.
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="../assets/js/tracking-code.js"></script>
+  <script src="../assets/js/login.js"></script>
+  <script>
+    // Keybinding secreto: Alt + Shift + 4 para revelar/esconder login
+    (function() {
+      const loginPanel = document.getElementById('login-panel');
+      if (!loginPanel) {
+        console.error('❌ Elemento login-panel não encontrado!');
+        return;
+      }
+
+      let revealed = false;
+      console.log('✓ Sistema de atalho secreto inicializado');
+      console.log('⌨️  Pressione: Alt + Shift + 4');
+
+      window.addEventListener('keydown', (e) => {
+        // Detecta Alt + Shift + 4 (tanto pelo e.key quanto pelo e.code)
+        const is4 = e.key === '4' || e.code === 'Digit4';
+        
+        if (e.altKey && e.shiftKey && is4) {
+          e.preventDefault();
+          revealed = !revealed;
+          
+          if (revealed) {
+            loginPanel.classList.remove('hidden');
+            loginPanel.setAttribute('aria-hidden', 'false');
+            loginPanel.style.display = 'block';
+            console.log('🔓 PAINEL DE LOGIN REVELADO!');
+            console.log('   Alt+Shift+4 novamente para esconder');
+          } else {
+            loginPanel.classList.add('hidden');
+            loginPanel.setAttribute('aria-hidden', 'true');
+            loginPanel.style.display = 'none';
+            console.log('🔒 Painel de login ocultado');
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

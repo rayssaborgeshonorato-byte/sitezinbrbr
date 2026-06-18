@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gerador - Rastreamento (Offline)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <style>
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .header-correios {
+      background: #FFD600;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .generator-form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header-correios">
+      <h1 style="color: #333;">Gerador de Código de Rastreio</h1>
+    </div>
+
+    <div class="generator-form">
+      <h2>Criar Novo Código</h2>
+      <form id="generate-form">
+        <label for="prefix">Prefixo:</label>
+        <input type="text" id="prefix" name="prefix" value="BR" placeholder="Ex: BR">
+        
+        <label for="number">Número:</label>
+        <input type="number" id="number" name="number" placeholder="Ex: 123456" min="100000" max="999999">
+        
+        <button type="submit">Gerar Código</button>
+      </form>
+      
+      <div id="result" style="margin-top: 20px;"></div>
+    </div>
+
+    <p style="margin-top: 20px; text-align: center;">
+      <a href="login.html" style="color: #FF8F00;">← Voltar para Login</a>
+    </p>
+  </div>
+
+  <script>
+    document.getElementById('generate-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const prefix = document.getElementById('prefix').value.trim().toUpperCase() || 'BR';
+      const number = document.getElementById('number').value.trim();
+      
+      if (!number) {
+        alert('Preencha o número.');
+        return;
+      }
+      
+      const code = `${prefix}-${number}`;
+      const result = document.getElementById('result');
+      result.innerHTML = `<p style="color: green; font-size: 18px; font-weight: bold;">Código gerado: <strong>${code}</strong></p>`;
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste - Atalho Secreto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    h1 { color: #FF8F00; }
+    .code { background: #f0f0f0; padding: 10px; border-radius: 4px; font-family: monospace; margin: 10px 0; }
+    .success { color: green; font-weight: bold; }
+    .warning { color: orange; font-weight: bold; }
+    button { 
+      background: #FF8F00; 
+      color: white; 
+      border: none; 
+      padding: 10px 20px; 
+      border-radius: 4px; 
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover { background: #FFA500; }
+    #status { margin-top: 10px; padding: 10px; border-radius: 4px; background: #fffde7; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>🔐 Teste - Atalho Secreto</h1>
+    <p>Esta página contém instruções para testar o atalho secreto <strong>Alt+Shift+4</strong> no painel de login.</p>
+  </div>
+
+  <div class="box">
+    <h2>📋 Passos para Testar:</h2>
+    <ol>
+      <li>Clique no botão abaixo para abrir a página de login</li>
+      <li>Uma vez na página, pressione <strong>Alt + Shift + 4</strong></li>
+      <li>Abra o Console (F12) para ver mensagens de debug</li>
+      <li>Você deve ver: <span class="success">🔓 PAINEL DE LOGIN REVELADO!</span></li>
+      <li>Pressione novamente para esconder</li>
+    </ol>
+  </div>
+
+  <div class="box">
+    <h2>🧪 Teste Rápido</h2>
+    <p>Pressione <strong>Alt+Shift+4</strong> agora enquanto esta guia está ativa:</p>
+    <div id="status">Aguardando atalho...</div>
+    <p style="color: #666; font-size: 12px; margin-top: 20px;">
+      💡 Este teste mostra se o atalho foi detectado globalmente
+    </p>
+  </div>
+
+  <div class="box">
+    <button onclick="window.open('http://localhost:8080/pages/login.html', '_blank')">
+      🚀 ABRIR PÁGINA DE LOGIN AGORA
+    </button>
+  </div>
+
+  <div class="box">
+    <h2>📝 O que Esperar:</h2>
+    <div class="code">
+      Console deve mostrar:
+      <br>✓ Sistema de Login Carregado
+      <br>Pressione ALT + SHIFT + 4...
+      <br>✓ Sistema de atalho secreto inicializado
+      <br>⌨️  Pressione: Alt + Shift + 4
+    </div>
+  </div>
+
+  <script>
+    let altPressed = false;
+    let shiftPressed = false;
+    let lastKey = '';
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Alt') altPressed = true;
+      if (e.key === 'Shift') shiftPressed = true;
+      lastKey = e.key;
+      
+      const is4 = e.key === '4' || e.code === 'Digit4';
+      
+      if (e.altKey && e.shiftKey && is4) {
+        document.getElementById('status').innerHTML = 
+          '<span class="success">✓ ATALHO DETECTADO!</span><br>Alt+Shift+4 funcionando perfeitamente!';
+        console.log('✓ Atalho Alt+Shift+4 foi detectado nesta página de teste!');
+      }
+    });
+
+    console.log('%c🔐 Página de Teste do Atalho Secreto', 'color: #FF8F00; font-weight: bold; font-size: 16px;');
+    console.log('%cPressione ALT + SHIFT + 4 para testar', 'color: #666; font-size: 12px;');
+  </script>
+</body>
+</html>
