@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>Resultado do Rastreamento</title></head>
+<body>
+    <h2>📦 Encomenda: {{ codigo }}</h2>
+    <p>Situação da Encomenda: <strong>{{ pacote['status'] }}</strong></p>
+    <h3>🔎 Histórico da Encomenda:</h3>
+    <ul>
+        {% for evento in pacote['historico'] %}
+            <li>{{ evento['local'] }} - {{ evento['status'] }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/">Voltar</a>
+</body>
+</html>
